@@ -20,7 +20,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
@@ -37,10 +37,8 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color, focused }) => (
             <View style={{
-              position: "absolute",
-              bottom: 5,
-              borderRadius: 20, 
-              backgroundColor: theme.colors.secondaryContainer, 
+              borderRadius: 50, 
+              backgroundColor: theme.colors.secondaryContainer,
               alignItems: "center",
               justifyContent: "center",
               gap: 4,
