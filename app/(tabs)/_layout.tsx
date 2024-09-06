@@ -1,34 +1,70 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { useTheme, Text } from "react-native-paper";
+import { View } from "react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+  const theme = useTheme();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: theme.colors.primary,
         headerShown: false,
-      }}>
+        tabBarStyle: {
+          backgroundColor: theme.colors.background,
+          borderStartColor: theme.colors.onSurface,
+          borderTopWidth: 0,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="send"
         options={{
-          title: 'Explore',
+          title: "",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <View style={{
+              position: "absolute",
+              bottom: 5,
+              borderRadius: 20, 
+              backgroundColor: theme.colors.secondaryContainer, 
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 4,
+              width: 100, 
+              height: 60,
+            }}>
+              <TabBarIcon
+                name={focused ? "send" : "send-outline"}
+                color={color}
+              />
+              <Text style={{color: theme.colors.text, fontSize: 12}}>Send</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "settings" : "settings-outline"}
+              color={color}
+            />
           ),
         }}
       />

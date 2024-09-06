@@ -17,7 +17,7 @@ export const getAllMarketCoins = async () => {
 };
 
 export const useMarketCoins = () => {
-  return useQuery<CoinMarkets[]>({
+  return useQuery({
     queryKey: ["marketCoins"],
     queryFn: getAllMarketCoins,
   });
