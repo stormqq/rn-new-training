@@ -1,7 +1,20 @@
-import { DefaultTheme, MD3DarkTheme } from 'react-native-paper';
+import { DefaultTheme, MD3DarkTheme, MD3Theme } from 'react-native-paper';
+
+export type CustomThemeType = MD3Theme & {
+  colors: {
+    primary: string;
+    background: string;
+    surface: string;
+    accent: string;
+    text: string;
+    placeholder: string;
+    disabled: string;
+    onSurface: string;
+  };
+};
 
 // Light theme
-export const lightTheme = {
+export const lightTheme: CustomThemeType = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -17,7 +30,7 @@ export const lightTheme = {
 };
 
 // Dark theme
-export const darkTheme = {
+export const darkTheme: CustomThemeType = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,

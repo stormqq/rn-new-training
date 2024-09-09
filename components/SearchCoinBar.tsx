@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { CustomThemeType } from "@/themes/themes";
+import React, { useCallback, useState } from "react";
 import { View } from "react-native";
 import {
   Button,
@@ -8,13 +9,22 @@ import {
   useTheme,
 } from "react-native-paper";
 
+type SearchCoinBarProps = {
+  handleSearch: (input: string) => void;
+  addNotification: () => void;
+};
 export const SearchCoinBar = ({
   handleSearch,
-}: {
-  handleSearch: (input: string) => void;
-}) => {
+  addNotification,
+}: SearchCoinBarProps) => {
   const [input, setInput] = useState("");
-  const theme = useTheme();
+  const theme: CustomThemeType = useTheme();
+
+  const handlerSubmitSearch = useCallback(() => {
+    handleSearch(input);
+    addNotification();
+  }, [handleSearch, input]);
+
   return (
     <View
       style={{
@@ -27,13 +37,12 @@ export const SearchCoinBar = ({
       <TextInput
         placeholder="Search.."
         onChangeText={setInput}
-        onSubmitEditing={() => handleSearch(input)}
         value={input}
         style={{ margin: 10, flex: 1 }}
         clearButtonMode="never"
         underlineStyle={{ display: "none" }}
       />
-      <IconButton icon={"filter"} onPress={() => handleSearch(input)} />
+      <IconButton icon={"filter"} onPress={handlerSubmitSearch} />
     </View>
   );
 };

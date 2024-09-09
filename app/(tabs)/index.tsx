@@ -1,76 +1,96 @@
-import {
-  SafeAreaView,
-  RefreshControl,
-} from "react-native";
-
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { SafeAreaView, RefreshControl, LayoutAnimation } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { useEffect, useMemo, useState } from "react";
+import { useTheme } from "react-native-paper";
 import { useMarketCoins } from "@/api/marketCoins";
 import SearchCoinBar from "@/components/SearchCoinBar";
-import { useTheme } from "react-native-paper";
 import CoinItem from "@/components/CoinItem";
 import { filterBySearchQuery } from "@/helpers/filterBySearchQuery";
-import { Accelerometer } from "expo-sensors";
-import { useSettingsStore } from "@/store/useSettingsStore";
-import { Subscription } from "expo-sensors/build/Pedometer";
+import { CoinMarkets } from "@/types/coinMarkets";
+import Animated, { LinearTransition } from "react-native-reanimated";
+import { Toast } from "@/components/Toast";
+import { useToasts } from "@/hooks/useToasts";
+import { CustomThemeType } from "@/themes/themes";
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const { data, refetch, isLoading } = useMarketCoins();
+  const [coins, setCoins] = useState(data || []);
 
-  const { isShakingModeActive, setIsCurrentlyShaking } = useSettingsStore();
-  const [shakeTimeout, setShakeTimeout] = useState(null);
+  const { notifications, addNotification, removeNotification } = useToasts();
+
+  const listRef = useRef<FlashList<number> | null>(null);
 
   useEffect(() => {
-    let subscription: Subscription;
-    if (isShakingModeActive) {
-      Accelerometer.setUpdateInterval(300);
-
-      subscription = Accelerometer.addListener((accelerometerData) => {
-        const { x, y, z } = accelerometerData;
-
-        if (Math.abs(x) > 1.5 || Math.abs(y) > 1.5 || Math.abs(z) > 1.5) {
-          setIsCurrentlyShaking(true);
-          if (shakeTimeout) {
-            clearTimeout(shakeTimeout);
-          }
-          const timeout = setTimeout(() => {
-            setIsCurrentlyShaking(false);
-            console.log("Shaking stopped");
-          }, 2000);
-
-          setShakeTimeout(timeout);
-        }
-      });
-    }
-    return () => {
-      subscription && subscription.remove();
-      if (shakeTimeout) {
-        clearTimeout(shakeTimeout);
-      }
-    };
-  }, [isShakingModeActive, shakeTimeout]);
+    setCoins(data);
+  }, [data]);
 
   const filteredCoins = useMemo(() => {
-    return filterBySearchQuery(data, searchQuery);
-  }, [data, searchQuery]);
+    return filterBySearchQuery(coins, searchQuery);
+  }, [coins, searchQuery]);
 
-  const theme = useTheme();
+  const removeCoin = (id: string) => {
+    setCoins((prevCoins: CoinMarkets[]) =>
+      prevCoins.filter((coin) => coin.id !== id)
+    );
+
+    animateLayoutChanges();
+  };
+
+  const animateLayoutChanges = () => {
+    listRef.current?.prepareForLayoutAnimationRender();
+    LayoutAnimation.configureNext({
+      ...LayoutAnimation.Presets.easeInEaseOut,
+      duration: 3000,
+    });
+  };
+
+  const theme: CustomThemeType = useTheme();
+
+  const shouldUseFlashList = true;
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.colors.background, padding: 10 }}
     >
-      <SearchCoinBar handleSearch={setSearchQuery} />
-      <FlashList
-        data={filteredCoins}
-        renderItem={({ item, index }) => (
-          <CoinItem coin={item} index={index} />
-        )}
-        estimatedItemSize={44}
-        refreshControl={
-          <RefreshControl onRefresh={refetch} refreshing={isLoading} />
-        }
+      <SearchCoinBar
+        handleSearch={setSearchQuery}
+        addNotification={addNotification}
       />
+      {shouldUseFlashList ? (
+        <FlashList
+          ref={listRef}
+          data={filteredCoins}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <CoinItem coin={item} index={index} removeCoin={removeCoin} />
+          )}
+          estimatedItemSize={44}
+          refreshControl={
+            <RefreshControl onRefresh={refetch} refreshing={isLoading} />
+          }
+        />
+      ) : (
+        <Animated.FlatList
+          data={filteredCoins}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => (
+            <CoinItem coin={item} index={index} removeCoin={removeCoin} />
+          )}
+          refreshControl={
+            <RefreshControl onRefresh={refetch} refreshing={isLoading} />
+          }
+          itemLayoutAnimation={LinearTransition}
+        />
+      )}
+      {notifications.map((notification, index) => (
+        <Toast
+          key={notification.id}
+          id={notification.id}
+          index={index}
+          onRemove={removeNotification}
+        />
+      ))}
     </SafeAreaView>
   );
 }

@@ -4,9 +4,10 @@ import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { useTheme, Text } from "react-native-paper";
 import { View } from "react-native";
+import { CustomThemeType } from "@/themes/themes";
 
 export default function TabLayout() {
-  const theme = useTheme();
+  const theme: CustomThemeType = useTheme();
   return (
     <Tabs
       screenOptions={{
@@ -42,6 +43,7 @@ export default function TabLayout() {
               alignItems: "center",
               justifyContent: "center",
               gap: 4,
+              bottom: 5,
               width: 100, 
               height: 60,
             }}>

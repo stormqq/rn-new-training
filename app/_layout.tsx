@@ -10,8 +10,10 @@ import { useThemeStore } from "@/store/useThemeStore";
 import { PaperProvider, Text } from "react-native-paper";
 import { darkTheme, lightTheme } from "@/themes/themes";
 import { StatusBar } from "expo-status-bar";
-import { AppState, View } from "react-native";
-import * as LocalAuthentication from "expo-local-authentication";
+import { View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ToastProvider } from "react-native-toast-notifications";
+import { useAuth } from "@/hooks/useAuth";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -23,39 +25,7 @@ export default function RootLayout() {
 
   const { currentTheme, setTheme } = useThemeStore();
 
-  const [appState, setAppState] = useState(AppState.currentState);
-  const [authError, setAuthError] = useState<string | null>(null);
-
-  const authenticate = async () => {
-    const result = await LocalAuthentication.authenticateAsync({
-      promptMessage: "Unlock with Biometrics",
-      fallbackLabel: "Use Passcode",
-    });
-
-    if (!result.success) {
-      setAuthError("Authentication failed. Please try again.");
-    } else {
-      setAuthError(null);
-    }
-  };
-
-  useEffect(() => {
-    authenticate();
-    
-    const subscription = AppState.addEventListener(
-      "change",
-      async (nextAppState) => {
-        if (appState === "background" && nextAppState === "active") {
-          authenticate();
-        }
-        setAppState(nextAppState);
-      }
-    );
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  const { authError, authenticate } = useAuth();
 
   useEffect(() => {
     setTheme(colorScheme);
@@ -78,23 +48,27 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <PaperProvider theme={currentTheme === "light" ? lightTheme : darkTheme}>
-        <StatusBar translucent={false} />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-        {authError && (
-          <View
-            style={{
-              padding: 16,
-              backgroundColor: "red",
-              alignItems: "center",
-            }}
-          >
-            <Text onPress={authenticate} style={{ color: "white" }}>
-              {authError}
-            </Text>
-          </View>
-        )}
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <ToastProvider>
+            <StatusBar translucent={false} />
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+            {authError && (
+              <View
+                style={{
+                  padding: 16,
+                  backgroundColor: "red",
+                  alignItems: "center",
+                }}
+              >
+                <Text onPress={authenticate} style={{ color: "white" }}>
+                  {authError}
+                </Text>
+              </View>
+            )}
+          </ToastProvider>
+        </GestureHandlerRootView>
       </PaperProvider>
     </QueryClientProvider>
   );
