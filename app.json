@@ -16,11 +16,13 @@
       "supportsTablet": true
     },
     "android": {
+      "bundleIdentifier": "com.anspencer.rnnewtraining",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anspencer.rnnewtraining"
+      "package": "com.anspencer.rnnewtraining",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -34,7 +36,11 @@
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
-      ]
+      ],
+      "expo-build-properties",
+      "@react-native-firebase/app",
+			"@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true

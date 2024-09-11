@@ -14,6 +14,7 @@ import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ToastProvider } from "react-native-toast-notifications";
 import { useAuth } from "@/hooks/useAuth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -26,6 +27,11 @@ export default function RootLayout() {
   const { currentTheme, setTheme } = useThemeStore();
 
   const { authError, authenticate } = useAuth();
+
+  GoogleSignin.configure({
+    webClientId:
+      "11499638147-lggaeotgrn1cnkl2185656jdrev01li1.apps.googleusercontent.com",
+  });
 
   useEffect(() => {
     setTheme(colorScheme);

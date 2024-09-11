@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "11499638147",
+    "project_id": "rn-training-26466",
+    "storage_bucket": "rn-training-26466.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11499638147:android:63e7ceca0048cd71b0bab6",
+        "android_client_info": {
+          "package_name": "com.anspencer.rnnewtraining"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "11499638147-iqhlc0bcg6tlv9jdp3c9g3vder0gua4c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anspencer.rnnewtraining",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "11499638147-lggaeotgrn1cnkl2185656jdrev01li1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm_ILvp7PVJy6ZkoC7ulrZO4Ks1FpxIsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11499638147-lggaeotgrn1cnkl2185656jdrev01li1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
