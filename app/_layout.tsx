@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { router, Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
@@ -15,6 +15,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ToastProvider } from "react-native-toast-notifications";
 import { useAuth } from "@/hooks/useAuth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useAuthStore } from "@/store/useAuthStore";
+import { configureGoogleSignIn } from "@/helpers/configHelpers";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -22,32 +24,34 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  const { user, authError } = useAuthStore();
   const colorScheme = useColorScheme();
-
   const { currentTheme, setTheme } = useThemeStore();
+  const { authenticate } = useAuth();
 
-  const { authError, authenticate } = useAuth();
-
-  GoogleSignin.configure({
-    webClientId:
-      "11499638147-lggaeotgrn1cnkl2185656jdrev01li1.apps.googleusercontent.com",
-  });
-
+  // initial user settings setup
   useEffect(() => {
     setTheme(colorScheme);
+    configureGoogleSignIn();
   }, [colorScheme]);
 
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
-    if (loaded) {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) {
+  useEffect(() => {
+    if (fontsLoaded) {
+      router.replace(user ? "/home" : "/login");
+    }
+  }, [user, fontsLoaded]);
+
+  if (!fontsLoaded) {
     return null;
   }
 
@@ -57,9 +61,7 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ToastProvider>
             <StatusBar translucent={false} />
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
+            <Slot />
             {authError && (
               <View
                 style={{

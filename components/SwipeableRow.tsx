@@ -11,7 +11,6 @@ type SwipeableRowProps = {
 
 export default class SwipeableRow extends Component<SwipeableRowProps> {
   private renderRightAction = (
-    text: string,
     color: string,
     x: number,
     progress: Animated.AnimatedInterpolation<number>
@@ -47,7 +46,7 @@ export default class SwipeableRow extends Component<SwipeableRowProps> {
         flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {this.renderRightAction("More", "#dd2c00", 64, progress)}
+      {this.renderRightAction("#dd2c00", 64, progress)}
     </View>
   );
 
@@ -69,12 +68,6 @@ export default class SwipeableRow extends Component<SwipeableRowProps> {
         leftThreshold={30}
         rightThreshold={40}
         renderRightActions={this.renderRightActions}
-        onSwipeableOpen={(direction) => {
-          console.log(`Opening swipeable from the ${direction}`);
-        }}
-        onSwipeableClose={(direction) => {
-          console.log(`Closing swipeable to the ${direction}`);
-        }}
       >
         {children}
       </Swipeable>

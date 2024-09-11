@@ -6,6 +6,7 @@ import {
   isSuccessResponse,
 } from "@react-native-google-signin/google-signin";
 import { useAuthStore } from "@/store/useAuthStore";
+import { router } from "expo-router";
 
 const Login = () => {
   const { setUser, setAuthError } = useAuthStore();
@@ -16,6 +17,7 @@ const Login = () => {
       const response = await GoogleSignin.signIn();
       if (isSuccessResponse(response)) {
         setUser(response.data?.user);
+        router.replace("./home");
         console.log("user info", response.data);
       } else {
         setAuthError("Sign in error");

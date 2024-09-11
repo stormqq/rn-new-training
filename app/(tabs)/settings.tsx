@@ -12,11 +12,18 @@ export default function SettingsScreen() {
   const { isShakingModeActive, setIsShakingModeActive } = useSettingsStore();
   const theme: CustomThemeType = useTheme();
   const { user, authError } = useAuthStore();
-  
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {user && (
-        <Text style={{ fontSize: 30, alignSelf: "center", margin: 20, color: theme.colors.text }}>
+        <Text
+          style={{
+            fontSize: 30,
+            alignSelf: "center",
+            margin: 20,
+            color: theme.colors.text,
+          }}
+        >
           Hi,{" "}
           {
             <Text style={{ fontWeight: "bold", color: "purple" }}>
@@ -46,8 +53,8 @@ export default function SettingsScreen() {
         />
       </View>
       <View style={styles.authButtons}>
-      {user ? <Lougout /> : <Login />}
-      {authError && <Text style={styles.authError}>{authError}</Text>}
+        {user && <Lougout />}
+        {authError && <Text style={styles.authError}>{authError}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -61,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   authButtons: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     left: 0,
     right: 0,

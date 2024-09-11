@@ -8,6 +8,7 @@ import ComparisonSlider from "@/components/CompareSlider";
 
 export default function SendScreen() {
   const theme = useTheme();
+
   return (
     <SafeAreaView
       style={{
