@@ -89,6 +89,8 @@ export default function HomeScreen() {
           id={notification.id}
           index={index}
           onRemove={removeNotification}
+          text={notification.text}
+          type={notification.type}
         />
       ))}
     </SafeAreaView>

@@ -11,7 +11,7 @@ import {
 
 type SearchCoinBarProps = {
   handleSearch: (input: string) => void;
-  addNotification: () => void;
+  addNotification: (text: string, type: "SUCCESS" | "ERROR" | "INFO") => void;
 };
 export const SearchCoinBar = ({
   handleSearch,
@@ -22,7 +22,7 @@ export const SearchCoinBar = ({
 
   const handlerSubmitSearch = useCallback(() => {
     handleSearch(input);
-    addNotification();
+    addNotification("Coins have been updated", "SUCCESS");
   }, [handleSearch, input]);
 
   return (

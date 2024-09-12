@@ -11,9 +11,17 @@ type ToastProps = {
   id: number;
   index: number;
   onRemove: (id: number) => void;
+  text: string;
+  type: "SUCCESS" | "ERROR" | "INFO";
 };
 
-export const Toast = ({ id, index, onRemove }: ToastProps) => {
+const TOAST_TYPES = {
+  SUCCESS: "#098013",
+  ERROR: "#800328",
+  INFO: "#4f4a4b",
+};
+
+export const Toast = ({ id, index, onRemove, text, type }: ToastProps) => {
   const offsetX = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -33,9 +41,13 @@ export const Toast = ({ id, index, onRemove }: ToastProps) => {
   return (
     <PanGestureHandler onGestureEvent={handleGesture}>
       <Animated.View
-        style={[styles.toast, { bottom: 25 + index * 60 }, animatedStyle]}
+        style={[
+          { ...styles.toast, backgroundColor: TOAST_TYPES[type] },
+          { bottom: 25 + index * 60 },
+          animatedStyle,
+        ]}
       >
-        <Text style={styles.toastText}>Coins have been updated</Text>
+        <Text style={styles.toastText}>{text}</Text>
       </Animated.View>
     </PanGestureHandler>
   );
@@ -46,7 +58,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 60,
     right: 60,
-    backgroundColor: "green",
     padding: 15,
     borderRadius: 5,
     zIndex: 999,

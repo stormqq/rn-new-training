@@ -18,7 +18,6 @@ const Login = () => {
       if (isSuccessResponse(response)) {
         setUser(response.data?.user);
         router.replace("./home");
-        console.log("user info", response.data);
       } else {
         setAuthError("Sign in error");
       }

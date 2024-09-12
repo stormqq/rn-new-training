@@ -1,14 +1,17 @@
 import { useState } from "react";
 
 export const useToasts = () => {
-  const [notifications, setNotifications] = useState<{ id: number }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number, text: string, type: "SUCCESS" | "ERROR" | "INFO" }[]>([]);
 
-  const addNotification = () => {
+  const addNotification = (
+    text: string,
+    type: "SUCCESS" | "ERROR" | "INFO"
+  ) => {
     setNotifications((prev) => {
       if (prev.length >= 3) {
-        return [...prev.slice(1), { id: Date.now() }];
+        return [...prev.slice(1), { id: Date.now(), text, type }];
       }
-      return [...prev, { id: Date.now() }];
+      return [...prev, { id: Date.now(), text, type }];
     });
   };
 
