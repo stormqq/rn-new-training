@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import React, { useMemo, useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { Avatar, IconButton, Text, useTheme } from "react-native-paper";
@@ -8,6 +8,8 @@ import { CoinMarkets } from "@/types/coinMarkets";
 import { CustomThemeType } from "@/themes/themes";
 import { useToasts } from "@/hooks/useToasts";
 import { Toast } from "@/components/Toast";
+import { CoinPriceChart } from "@/components/PriceChart";
+import { mockCoinData } from "@/constants/coinDataMock";
 
 const CoinCard = () => {
   const { id } = useLocalSearchParams();
@@ -37,7 +39,7 @@ const CoinCard = () => {
         return;
       }
       const isFavorite = favorites.includes(coin?.id);
-      const updatedFavorites = favorites.includes(coin?.id)
+      const updatedFavorites = isFavorite
         ? favorites.filter((favId) => favId !== coin?.id)
         : [...favorites, coin?.id];
 
@@ -55,15 +57,7 @@ const CoinCard = () => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        padding: 20,
-        backgroundColor: theme.colors.background,
-        gap: 30,
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <View style={styles.upperBar}>
         <IconButton icon="arrow-left" onPress={() => router.back()} />
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -80,56 +74,72 @@ const CoinCard = () => {
         />
       </View>
 
-      <View
-        style={{
-          ...styles.about,
-          backgroundColor: theme.colors.accent,
-        }}
+      <ScrollView
+        contentContainerStyle={{ alignItems: "center", padding: 20, gap: 30 }}
       >
-        <View style={styles.infoRow}>
-          <Text variant="titleMedium" style={styles.infoText}>
-            Market Rank
-          </Text>
-          <Text variant="titleMedium">#{coin?.market_cap_rank}</Text>
+        <View
+          style={{
+            ...styles.about,
+            padding: 20,
+            backgroundColor: theme.colors.accent,
+          }}
+        >
+          <CoinPriceChart data={mockCoinData} />
         </View>
-        <View style={styles.infoRow}>
-          <Text variant="titleMedium" style={styles.infoText}>
-            Current price
-          </Text>
-          <Text variant="titleMedium">${coin?.current_price}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text variant="titleMedium" style={styles.infoText}>
-            Change percentage
-          </Text>
-          <Text variant="titleMedium">
-            ${coin?.price_change_percentage_24h}
-          </Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text variant="titleMedium" style={styles.infoText}>
-            High 24h
-          </Text>
-          <Text variant="titleMedium">${coin?.high_24h}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text variant="titleMedium" style={styles.infoText}>
-            Low 24h
-          </Text>
-          <Text variant="titleMedium">${coin?.low_24h}</Text>
-        </View>
-      </View>
 
-      {notifications.map((notification, index) => (
-        <Toast
-          key={notification.id}
-          id={notification.id}
-          index={index}
-          onRemove={removeNotification}
-          text={notification.text}
-          type={notification.type}
-        />
-      ))}
+        <View
+          style={{
+            ...styles.about,
+            backgroundColor: theme.colors.accent,
+          }}
+        >
+          <View style={styles.infoRow}>
+            <Text variant="titleMedium" style={styles.infoText}>
+              Market Rank
+            </Text>
+            <Text variant="titleMedium">#{coin?.market_cap_rank}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text variant="titleMedium" style={styles.infoText}>
+              Current price
+            </Text>
+            <Text variant="titleMedium">${coin?.current_price}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text variant="titleMedium" style={styles.infoText}>
+              Change percentage
+            </Text>
+            <Text variant="titleMedium">
+              ${coin?.price_change_percentage_24h}
+            </Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text variant="titleMedium" style={styles.infoText}>
+              High 24h
+            </Text>
+            <Text variant="titleMedium">${coin?.high_24h}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text variant="titleMedium" style={styles.infoText}>
+              Low 24h
+            </Text>
+            <Text variant="titleMedium">${coin?.low_24h}</Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      <View style={styles.notificationContainer}>
+        {notifications.map((notification, index) => (
+          <Toast
+            key={notification.id}
+            id={notification.id}
+            index={index}
+            onRemove={removeNotification}
+            text={notification.text}
+            type={notification.type}
+          />
+        ))}
+      </View>
     </View>
   );
 };
@@ -148,6 +158,7 @@ const styles = StyleSheet.create({
   about: {
     borderRadius: 10,
     width: "100%",
+    overflow: "hidden",
   },
   infoRow: {
     flexDirection: "row",
@@ -157,5 +168,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     color: "#9e9e9e",
+  },
+  notificationContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    alignItems: "center",
   },
 });
