@@ -1,5 +1,5 @@
-import { mockCoinData } from "@/constants/coinDataMock";
-import { CustomThemeType } from "@/themes/themes";
+import { mockCoinData } from "@/src/constants/coinDataMock";
+import { CustomThemeType } from "@/src/themes/themes";
 import { Text, useTheme } from "react-native-paper";
 import { LineChart } from "react-native-wagmi-charts";
 import styled from "styled-components/native";

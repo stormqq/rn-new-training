@@ -4,16 +4,16 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import styled from "styled-components/native";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "@/src/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { useThemeStore } from "@/store/useThemeStore";
+import { useThemeStore } from "@/src/store/useThemeStore";
 import { PaperProvider, Text } from "react-native-paper";
-import { darkTheme, lightTheme } from "@/themes/themes";
+import { darkTheme, lightTheme } from "@/src/themes/themes";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useLocalAuth } from "@/hooks/useLocalAuth";
-import { useAuthStore } from "@/store/useAuthStore";
-import { configureGoogleSignIn } from "@/helpers/configHelpers";
+import { useLocalAuth } from "@/src/hooks/useLocalAuth";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { configureGoogleSignIn } from "@/src/helpers/configHelpers";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,7 +33,7 @@ export default function RootLayout() {
   }, []);
 
   const [fontsLoaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("../src/assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {

@@ -4,14 +4,14 @@ import styled from "styled-components/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Avatar, IconButton, Text, useTheme } from "react-native-paper";
 import { queryClient } from "../_layout";
-import { CoinMarkets } from "@/types/coinMarkets";
-import { CustomThemeType } from "@/themes/themes";
-import { useToasts } from "@/hooks/useToasts";
-import { Toast } from "@/components/Other/Toast";
-import { CoinPriceChart } from "@/components/CoinDetails/PriceChart";
-import { mockCoinData } from "@/constants/coinDataMock";
-import { useFavoriteCoins } from "@/hooks/useFavoriteCoins";
-import { CoinInfoRow } from "@/components/CoinDetails/InfoRow";
+import { CoinMarkets } from "@/src/types/coinMarkets";
+import { CustomThemeType } from "@/src/themes/themes";
+import { useToasts } from "@/src/hooks/useToasts";
+import { Toast } from "@/src/components/Other/Toast";
+import { CoinPriceChart } from "@/src/components/CoinDetails/PriceChart";
+import { mockCoinData } from "@/src/constants/coinDataMock";
+import { useFavoriteCoins } from "@/src/hooks/useFavoriteCoins";
+import { CoinInfoRow } from "@/src/components/CoinDetails/InfoRow";
 
 const CoinCard = () => {
   const { id } = useLocalSearchParams();

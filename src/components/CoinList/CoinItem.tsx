@@ -1,11 +1,11 @@
 import { Pressable, Text } from "react-native";
 import React, { memo, useCallback } from "react";
-import { CoinMarkets } from "@/types/coinMarkets";
+import { CoinMarkets } from "@/src/types/coinMarkets";
 import { Avatar, useTheme } from "react-native-paper";
-import { useSettingsStore } from "@/store/useSettingsStore";
+import { useSettingsStore } from "@/src/store/useSettingsStore";
 import Animated, { FadeIn, LightSpeedOutLeft } from "react-native-reanimated";
 import SwipeableRow from "./SwipeableRow";
-import { CustomThemeType } from "@/themes/themes";
+import { CustomThemeType } from "@/src/themes/themes";
 import { Href, router } from "expo-router";
 import styled from "styled-components/native";
 

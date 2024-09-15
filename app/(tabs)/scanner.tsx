@@ -7,8 +7,8 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import * as Clipboard from "expo-clipboard";
-import { useToasts } from "@/hooks/useToasts";
-import { Toast } from "@/components/Other/Toast";
+import { useToasts } from "@/src/hooks/useToasts";
+import { Toast } from "@/src/components/Other/Toast";
 import styled from "styled-components/native";
 
 export default function SendScreen() {

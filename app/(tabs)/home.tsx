@@ -8,15 +8,15 @@ import React, {
 import { RefreshControl, LayoutAnimation } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "react-native-paper";
-import { useMarketCoins } from "@/api/marketCoins";
-import SearchCoinBar from "@/components/CoinList/SearchCoinBar";
-import CoinItem from "@/components/CoinList/CoinItem";
-import { filterBySearchQuery } from "@/helpers/filterBySearchQuery";
-import { CoinMarkets } from "@/types/coinMarkets";
+import { useMarketCoins } from "@/src/api/marketCoins";
+import SearchCoinBar from "@/src/components/CoinList/SearchCoinBar";
+import CoinItem from "@/src/components/CoinList/CoinItem";
+import { filterBySearchQuery } from "@/src/helpers/filterBySearchQuery";
+import { CoinMarkets } from "@/src/types/coinMarkets";
 import Animated, { LinearTransition } from "react-native-reanimated";
-import { Toast } from "@/components/Other/Toast";
-import { useToasts } from "@/hooks/useToasts";
-import { CustomThemeType } from "@/themes/themes";
+import { Toast } from "@/src/components/Other/Toast";
+import { useToasts } from "@/src/hooks/useToasts";
+import { CustomThemeType } from "@/src/themes/themes";
 import styled from "styled-components/native";
 
 export default function HomeScreen() {

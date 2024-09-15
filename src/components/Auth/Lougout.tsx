@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-native-paper";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

@@ -1,10 +1,10 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { TabBarIcon } from "@/components/Other/TabBarIcon";
+import { TabBarIcon } from "@/src/components/Other/TabBarIcon";
 import { useTheme, Text } from "react-native-paper";
 import { View } from "react-native";
-import { CustomThemeType } from "@/themes/themes";
+import { CustomThemeType } from "@/src/themes/themes";
 
 export default function TabLayout() {
   const theme: CustomThemeType = useTheme();

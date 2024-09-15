@@ -1,4 +1,4 @@
-import { CoinMarkets } from "@/types/coinMarkets";
+import { CoinMarkets } from "@/src/types/coinMarkets";
 import axios from "axios";
 import { useQuery } from "react-query";
 

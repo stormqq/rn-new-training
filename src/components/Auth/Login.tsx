@@ -5,7 +5,7 @@ import {
   isErrorWithCode,
   isSuccessResponse,
 } from "@react-native-google-signin/google-signin";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 import { router } from "expo-router";
 
 const Login = () => {

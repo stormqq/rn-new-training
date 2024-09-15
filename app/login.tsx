@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import { Text, View } from "react-native";
-import { useAuthStore } from "@/store/useAuthStore";
-import Login from "@/components/Auth/Login";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import Login from "@/src/components/Auth/Login";
 import { router } from "expo-router";
 import { useTheme } from "react-native-paper";
 

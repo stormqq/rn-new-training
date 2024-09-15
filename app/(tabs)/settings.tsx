@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
-import Login from "@/components/Auth/Login";
-import Lougout from "@/components/Auth/Lougout";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useSettingsStore } from "@/store/useSettingsStore";
-import { useThemeStore } from "@/store/useThemeStore";
-import { CustomThemeType } from "@/themes/themes";
+import Login from "@/src/components/Auth/Login";
+import Lougout from "@/src/components/Auth/Lougout";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { useSettingsStore } from "@/src/store/useSettingsStore";
+import { useThemeStore } from "@/src/store/useThemeStore";
+import { CustomThemeType } from "@/src/themes/themes";
 import { SafeAreaView, Text, View } from "react-native";
 import { Button, Switch, useTheme } from "react-native-paper";
 

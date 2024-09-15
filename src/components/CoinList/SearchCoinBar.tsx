@@ -1,4 +1,4 @@
-import { CustomThemeType } from "@/themes/themes";
+import { CustomThemeType } from "@/src/themes/themes";
 import React, { useCallback, useState } from "react";
 import { View } from "react-native";
 import { IconButton, TextInput, useTheme } from "react-native-paper";
@@ -29,7 +29,12 @@ export const SearchCoinBar = ({
         clearButtonMode="never"
         underlineStyle={{ display: "none" }}
       />
-      <IconButton icon={"filter"} onPress={handlerSubmitSearch} />
+      <IconButton
+        icon={{
+          uri: "https://static-00.iconduck.com/assets.00/search-icon-2048x2048-cmujl7en.png",
+        }}
+        onPress={handlerSubmitSearch}
+      />
     </Container>
   );
 };
