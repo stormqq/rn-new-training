@@ -1,8 +1,8 @@
 import { mockCoinData } from "@/constants/coinDataMock";
 import { CustomThemeType } from "@/themes/themes";
-import { StyleSheet } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { LineChart } from "react-native-wagmi-charts";
+import styled from "styled-components/native";
 
 type PriceChartProps = {
   data: typeof mockCoinData;
@@ -22,19 +22,14 @@ export const CoinPriceChart = ({ data }: PriceChartProps) => {
 
   return (
     <LineChart.Provider data={data}>
-      <Text style={{ ...styles.info, color: theme.colors.text }}>
-        Coin chart
-      </Text>
-      <LineChart.DatetimeText
-        style={{ ...styles.dateTime, color: theme.colors.text }}
-        options={options}
-      />
-      <LineChart.PriceText
+      <StyledInfo theme={theme}>Coin chart</StyledInfo>
+      <StyledDateTimeText theme={theme} options={options} />
+      <StyledPriceText
+        theme={theme}
         format={({ value }) => {
           "worklet";
           return value && `$${value}`;
         }}
-        style={{ ...styles.price, color: theme.colors.text }}
         variant="formatted"
       />
       <LineChart>
@@ -45,16 +40,21 @@ export const CoinPriceChart = ({ data }: PriceChartProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  info: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  dateTime: {
-    fontSize: 20,
-  },
-  price: {
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-});
+const StyledInfo = styled(Text)<{ theme: CustomThemeType }>`
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: ${(props) => props.theme.colors.text};
+`;
+
+const StyledDateTimeText = styled(LineChart.DatetimeText)<{
+  theme: CustomThemeType;
+}>`
+  font-size: 20px;
+  color: ${(props) => props.theme.colors.text};
+`;
+
+const StyledPriceText = styled(LineChart.PriceText)<{ theme: CustomThemeType }>`
+  font-size: 30px;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.text};
+`;

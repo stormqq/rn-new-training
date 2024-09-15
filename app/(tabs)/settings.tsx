@@ -1,10 +1,11 @@
-import Login from "@/components/auth/Login";
-import Lougout from "@/components/auth/Lougout";
+import styled from "styled-components/native";
+import Login from "@/components/Auth/Login";
+import Lougout from "@/components/Auth/Lougout";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { CustomThemeType } from "@/themes/themes";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { Button, Switch, useTheme } from "react-native-paper";
 
 export default function SettingsScreen() {
@@ -14,70 +15,76 @@ export default function SettingsScreen() {
   const { user, authError } = useAuthStore();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <Container theme={theme}>
       {user && (
-        <Text
-          style={{
-            fontSize: 30,
-            alignSelf: "center",
-            margin: 20,
-            color: theme.colors.text,
-          }}
-        >
-          Hi,{" "}
-          {
-            <Text style={{ fontWeight: "bold", color: "purple" }}>
-              {user.name}
-            </Text>
-          }
-        </Text>
+        <WelcomeText theme={theme}>
+          Hi, <UserName>{user.name}</UserName>
+        </WelcomeText>
       )}
-      <View style={styles.setting}>
-        <Text style={{ fontSize: 30, color: theme.colors.text }}>
-          Dark theme
-        </Text>
+      <SettingRow>
+        <SettingLabel theme={theme}>Dark theme</SettingLabel>
         <Switch
           value={currentTheme === "dark"}
           color="#0a7ea4"
           onValueChange={toggleTheme}
         />
-      </View>
-      <View style={styles.setting}>
-        <Text style={{ fontSize: 30, color: theme.colors.text }}>
-          Shaking mode
-        </Text>
+      </SettingRow>
+      <SettingRow>
+        <SettingLabel theme={theme}>Shaking mode</SettingLabel>
         <Switch
           value={isShakingModeActive}
           color="#0a7ea4"
           onValueChange={setIsShakingModeActive}
         />
-      </View>
-      <View style={styles.authButtons}>
+      </SettingRow>
+      <AuthButtons>
         {user && <Lougout />}
-        {authError && <Text style={styles.authError}>{authError}</Text>}
-      </View>
-    </SafeAreaView>
+        {authError && <AuthError>{authError}</AuthError>}
+      </AuthButtons>
+    </Container>
   );
 }
 
-const styles = StyleSheet.create({
-  setting: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-  },
-  authButtons: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    padding: 20,
-  },
-  authError: {
-    color: "red",
-    textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
+const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${(props) => props.theme.colors.background};
+`;
+
+const WelcomeText = styled(Text)`
+  font-size: 30px;
+  align-self: center;
+  margin: 20px;
+  color: ${(props) => props.theme.colors.text};
+`;
+
+const UserName = styled(Text)`
+  font-weight: bold;
+  color: purple;
+`;
+
+const SettingRow = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+`;
+
+const SettingLabel = styled(Text)`
+  font-size: 30px;
+  color: ${(props) => props.theme.colors.text};
+`;
+
+const AuthButtons = styled(View)`
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 20px;
+`;
+
+const AuthError = styled(Text)`
+  color: red;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+`;

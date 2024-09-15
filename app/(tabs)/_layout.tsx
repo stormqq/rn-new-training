@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { TabBarIcon } from "@/components/Other/TabBarIcon";
 import { useTheme, Text } from "react-native-paper";
 import { View } from "react-native";
 import { CustomThemeType } from "@/themes/themes";
@@ -33,7 +33,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="send"
+        name="scanner"
         options={{
           title: "",
           tabBarIcon: ({ color, focused }) => (
@@ -48,10 +48,10 @@ export default function TabLayout() {
               height: 60,
             }}>
               <TabBarIcon
-                name={focused ? "send" : "send-outline"}
+              size={38}
+                name={focused ? "camera" : "camera-outline"}
                 color={color}
               />
-              <Text style={{color: theme.colors.text, fontSize: 12}}>Send</Text>
             </View>
           ),
         }}

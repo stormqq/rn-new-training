@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { AppState } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 
-export function useAuth() {
+export function useLocalAuth() {
   const [authError, setAuthError] = useState<string | null>(null);
 
   const authenticate = async () => {

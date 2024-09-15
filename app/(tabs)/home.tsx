@@ -1,16 +1,23 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { SafeAreaView, RefreshControl, LayoutAnimation } from "react-native";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { RefreshControl, LayoutAnimation } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "react-native-paper";
 import { useMarketCoins } from "@/api/marketCoins";
-import SearchCoinBar from "@/components/SearchCoinBar";
-import CoinItem from "@/components/CoinItem";
+import SearchCoinBar from "@/components/CoinList/SearchCoinBar";
+import CoinItem from "@/components/CoinList/CoinItem";
 import { filterBySearchQuery } from "@/helpers/filterBySearchQuery";
 import { CoinMarkets } from "@/types/coinMarkets";
 import Animated, { LinearTransition } from "react-native-reanimated";
-import { Toast } from "@/components/Toast";
+import { Toast } from "@/components/Other/Toast";
 import { useToasts } from "@/hooks/useToasts";
 import { CustomThemeType } from "@/themes/themes";
+import styled from "styled-components/native";
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,37 +29,31 @@ export default function HomeScreen() {
   const listRef = useRef<FlashList<number> | null>(null);
 
   useEffect(() => {
-    setCoins(data);
+    if (data) setCoins(data);
   }, [data]);
 
-  const filteredCoins = useMemo(() => {
-    return filterBySearchQuery(coins, searchQuery);
-  }, [coins, searchQuery]);
+  const filteredCoins = useMemo(
+    () => filterBySearchQuery(coins, searchQuery),
+    [coins, searchQuery]
+  );
 
-  const removeCoin = (id: string) => {
+  const removeCoin = useCallback((id: string) => {
     setCoins((prevCoins: CoinMarkets[]) =>
       prevCoins.filter((coin) => coin.id !== id)
     );
-
     animateLayoutChanges();
-  };
+  }, []);
 
-  const animateLayoutChanges = () => {
+  const animateLayoutChanges = useCallback(() => {
     listRef.current?.prepareForLayoutAnimationRender();
-    LayoutAnimation.configureNext({
-      ...LayoutAnimation.Presets.easeInEaseOut,
-      duration: 3000,
-    });
-  };
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  }, [listRef]);
 
   const theme: CustomThemeType = useTheme();
-
   const shouldUseFlashList = true;
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.colors.background, padding: 10 }}
-    >
+    <SafeArea theme={theme}>
       <SearchCoinBar
         handleSearch={setSearchQuery}
         addNotification={addNotification}
@@ -93,6 +94,12 @@ export default function HomeScreen() {
           type={notification.type}
         />
       ))}
-    </SafeAreaView>
+    </SafeArea>
   );
 }
+
+const SafeArea = styled.SafeAreaView<{ theme: CustomThemeType }>`
+  flex: 1;
+  background-color: ${(props) => props.theme.colors.background};
+  padding: 10px;
+`;

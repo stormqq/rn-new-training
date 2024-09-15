@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StyleSheet } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import { Text } from "react-native-paper";
@@ -21,7 +22,7 @@ const TOAST_TYPES = {
   INFO: "#4f4a4b",
 };
 
-export const Toast = ({ id, index, onRemove, text, type }: ToastProps) => {
+export const Toast = memo(({ id, index, onRemove, text, type }: ToastProps) => {
   const offsetX = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -51,7 +52,7 @@ export const Toast = ({ id, index, onRemove, text, type }: ToastProps) => {
       </Animated.View>
     </PanGestureHandler>
   );
-};
+});
 
 const styles = StyleSheet.create({
   toast: {

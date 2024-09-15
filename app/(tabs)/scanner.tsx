@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { Share } from "react-native";
 import { Button, Text } from "react-native-paper";
 import {
   Camera,
@@ -7,15 +7,13 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import * as Clipboard from "expo-clipboard";
-import { Share } from "react-native";
 import { useToasts } from "@/hooks/useToasts";
-import { Toast } from "@/components/Toast";
+import { Toast } from "@/components/Other/Toast";
+import styled from "styled-components/native";
 
 export default function SendScreen() {
   const device = useCameraDevice("back");
-
   const [lastScannedCode, setLastScannedCode] = useState<string | null>(null);
-
   const { notifications, addNotification, removeNotification } = useToasts();
 
   const codeScanner = useCodeScanner({
@@ -29,53 +27,43 @@ export default function SendScreen() {
     },
   });
 
-  const copyToClipboard = async () => {
+  const copyToClipboard = useCallback(async () => {
     if (!lastScannedCode) {
       addNotification("No data to copy", "ERROR");
       return;
     }
     await Clipboard.setStringAsync(lastScannedCode);
     addNotification("Copied to clipboard", "SUCCESS");
-  };
+  }, [addNotification, lastScannedCode]);
 
-  const shareFetchedData = async () => {
+  const shareFetchedData = useCallback(async () => {
     if (!lastScannedCode) {
       addNotification("No data to share", "ERROR");
       return;
     }
-    await Share.share({
-      message: lastScannedCode,
-    });
-  };
+    await Share.share({ message: lastScannedCode });
+  }, [addNotification, lastScannedCode]);
 
   if (!device) {
     return <Text>No camera device available</Text>;
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <Container>
       <Camera
         style={{ flex: 1 }}
         device={device}
         isActive={true}
         codeScanner={codeScanner}
       />
-      <View
-        style={{
-          position: "absolute",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          width: "100%",
-          bottom: 30,
-        }}
-      >
+      <Footer>
         <Button onPress={copyToClipboard} mode="contained">
           COPY
         </Button>
         <Button onPress={shareFetchedData} mode="contained">
           SHARE
         </Button>
-      </View>
+      </Footer>
       {notifications.map((notification, index) => (
         <Toast
           key={notification.id}
@@ -86,6 +74,18 @@ export default function SendScreen() {
           type={notification.type}
         />
       ))}
-    </View>
+    </Container>
   );
 }
+
+const Container = styled.View`
+  flex: 1;
+`;
+
+const Footer = styled.View`
+  position: absolute;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  bottom: 30px;
+`;

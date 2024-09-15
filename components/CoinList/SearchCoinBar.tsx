@@ -1,13 +1,8 @@
 import { CustomThemeType } from "@/themes/themes";
 import React, { useCallback, useState } from "react";
 import { View } from "react-native";
-import {
-  Button,
-  IconButton,
-  Searchbar,
-  TextInput,
-  useTheme,
-} from "react-native-paper";
+import { IconButton, TextInput, useTheme } from "react-native-paper";
+import styled from "styled-components/native";
 
 type SearchCoinBarProps = {
   handleSearch: (input: string) => void;
@@ -26,25 +21,29 @@ export const SearchCoinBar = ({
   }, [handleSearch, input]);
 
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        backgroundColor: theme.colors.background,
-      }}
-    >
-      <TextInput
+    <Container theme={theme}>
+      <StyledTextInput
         placeholder="Search.."
         onChangeText={setInput}
         value={input}
-        style={{ margin: 10, flex: 1 }}
         clearButtonMode="never"
         underlineStyle={{ display: "none" }}
       />
       <IconButton icon={"filter"} onPress={handlerSubmitSearch} />
-    </View>
+    </Container>
   );
 };
 
 export default SearchCoinBar;
+
+const Container = styled(View)<{ theme: CustomThemeType }>`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${(props) => props.theme.colors.background};
+`;
+
+const StyledTextInput = styled(TextInput)`
+  flex: 1;
+  margin: 10px;
+`;

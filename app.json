@@ -18,7 +18,7 @@
     "android": {
       "bundleIdentifier": "com.anspencer.rnnewtraining",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/doggo.jpg",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anspencer.rnnewtraining",
