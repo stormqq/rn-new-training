@@ -10,6 +10,7 @@ import Animated, {
 
 const LikeButton = () => {
   const [likes, setLikes] = useState(0);
+  
   const scaleValue = useSharedValue(1);
   const opacityValue = useSharedValue(1);
   const textScaleValue = useSharedValue(1);

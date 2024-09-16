@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useLocalAuth } from "@/src/hooks/useLocalAuth";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { configureGoogleSignIn } from "@/src/helpers/configHelpers";
+import { ToastManager } from "@/src/components/Other/ToastManager";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -21,10 +22,10 @@ SplashScreen.preventAutoHideAsync();
 export const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  const { user, authError } = useAuthStore();
+  const { user } = useAuthStore();
   const colorScheme = useColorScheme();
   const { currentTheme, setTheme } = useThemeStore();
-  const { authenticate } = useLocalAuth();
+  const { authenticate, localAuthError } = useLocalAuth();
 
   // * initial user settings setup
   useEffect(() => {
@@ -58,13 +59,14 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <StatusBar translucent={false} />
           <Slot />
-          {authError && (
+          {localAuthError && (
             <ErrorContainer>
               <ErrorText onPress={authenticate} style={{ color: "white" }}>
-                {authError}
+                {localAuthError}
               </ErrorText>
             </ErrorContainer>
           )}
+          <ToastManager />
         </GestureHandlerRootView>
       </PaperProvider>
     </QueryClientProvider>

@@ -1,4 +1,6 @@
+import { useToastStore } from "@/src/store/useToastStore";
 import { CustomThemeType } from "@/src/themes/themes";
+import { ToastType } from "@/src/types/toast";
 import React, { useCallback, useState } from "react";
 import { View } from "react-native";
 import { IconButton, TextInput, useTheme } from "react-native-paper";
@@ -6,18 +8,16 @@ import styled from "styled-components/native";
 
 type SearchCoinBarProps = {
   handleSearch: (input: string) => void;
-  addNotification: (text: string, type: "SUCCESS" | "ERROR" | "INFO") => void;
 };
-export const SearchCoinBar = ({
-  handleSearch,
-  addNotification,
-}: SearchCoinBarProps) => {
+export const SearchCoinBar = ({ handleSearch }: SearchCoinBarProps) => {
   const [input, setInput] = useState("");
   const theme: CustomThemeType = useTheme();
 
+  const { addNotification } = useToastStore();
+
   const handlerSubmitSearch = useCallback(() => {
     handleSearch(input);
-    addNotification("Coins have been updated", "SUCCESS");
+    addNotification("Coins have been updated", ToastType.SUCCESS);
   }, [handleSearch, input]);
 
   return (

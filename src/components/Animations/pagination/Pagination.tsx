@@ -11,8 +11,9 @@ import Animated, {
 import { IconButton } from "react-native-paper";
 import { Dot } from "./Dot";
 
+const totalDots = 5;
+
 export const Pagination = () => {
-  const totalDots = 5;
   const dotsArray = Array.from({ length: totalDots }, (_, index) => index);
 
   const progress = useSharedValue(0);

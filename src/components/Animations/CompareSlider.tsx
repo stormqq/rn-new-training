@@ -12,20 +12,22 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 
+type ComparisonSliderProps = {
+  image1: string;
+  image2: string;
+};
+
+const IMAGE_WIDTH = 230;
+const MIN_LIMIT = -IMAGE_WIDTH / 2;
+const MAX_LIMIT = IMAGE_WIDTH / 2;
+
 export default function ComparisonSlider({
   image1,
   image2,
-}: {
-  image1: string;
-  image2: string;
-}) {
+}: ComparisonSliderProps) {
   const pressed = useSharedValue<boolean>(false);
   const offset = useSharedValue<number>(0);
   const lastOffset = useSharedValue<number>(0);
-
-  const IMAGE_WIDTH = 230;
-  const MIN_LIMIT = -IMAGE_WIDTH / 2;
-  const MAX_LIMIT = IMAGE_WIDTH / 2;
 
   const pan = Gesture.Pan()
     .onBegin(() => {

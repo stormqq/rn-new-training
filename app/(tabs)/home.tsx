@@ -1,11 +1,12 @@
 import React, {
+  forwardRef,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { RefreshControl, LayoutAnimation } from "react-native";
+import { RefreshControl, LayoutAnimation, ScrollViewProps } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "react-native-paper";
 import { useMarketCoins } from "@/src/api/marketCoins";
@@ -14,17 +15,14 @@ import CoinItem from "@/src/components/CoinList/CoinItem";
 import { filterBySearchQuery } from "@/src/helpers/filterBySearchQuery";
 import { CoinMarkets } from "@/src/types/coinMarkets";
 import Animated, { LinearTransition } from "react-native-reanimated";
-import { Toast } from "@/src/components/Other/Toast";
-import { useToasts } from "@/src/hooks/useToasts";
 import { CustomThemeType } from "@/src/themes/themes";
 import styled from "styled-components/native";
+import { useToastStore } from "@/src/store/useToastStore";
 
 export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const { data, refetch, isLoading } = useMarketCoins();
   const [coins, setCoins] = useState(data || []);
-
-  const { notifications, addNotification, removeNotification } = useToasts();
 
   const listRef = useRef<FlashList<number> | null>(null);
 
@@ -41,23 +39,24 @@ export default function HomeScreen() {
     setCoins((prevCoins: CoinMarkets[]) =>
       prevCoins.filter((coin) => coin.id !== id)
     );
-    animateLayoutChanges();
-  }, []);
-
-  const animateLayoutChanges = useCallback(() => {
     listRef.current?.prepareForLayoutAnimationRender();
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }, [listRef]);
+  }, []);
 
   const theme: CustomThemeType = useTheme();
+
+  const renderScrollComponent = useCallback(
+    forwardRef((props: ScrollViewProps, ref) => (
+      <Animated.ScrollView {...props} />
+    )),
+    []
+  );
+
   const shouldUseFlashList = true;
 
   return (
     <SafeArea theme={theme}>
-      <SearchCoinBar
-        handleSearch={setSearchQuery}
-        addNotification={addNotification}
-      />
+      <SearchCoinBar handleSearch={setSearchQuery} />
       {shouldUseFlashList ? (
         <FlashList
           ref={listRef}
@@ -70,6 +69,7 @@ export default function HomeScreen() {
           refreshControl={
             <RefreshControl onRefresh={refetch} refreshing={isLoading} />
           }
+          renderScrollComponent={renderScrollComponent}
         />
       ) : (
         <Animated.FlatList
@@ -84,16 +84,6 @@ export default function HomeScreen() {
           itemLayoutAnimation={LinearTransition}
         />
       )}
-      {notifications.map((notification, index) => (
-        <Toast
-          key={notification.id}
-          id={notification.id}
-          index={index}
-          onRemove={removeNotification}
-          text={notification.text}
-          type={notification.type}
-        />
-      ))}
     </SafeArea>
   );
 }

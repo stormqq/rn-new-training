@@ -3,18 +3,16 @@ import styled from "styled-components/native";
 import { Text, View } from "react-native";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import Login from "@/src/components/Auth/Login";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { useTheme } from "react-native-paper";
 
 const LoginScreen = () => {
   const { user, authError } = useAuthStore();
   const theme = useTheme();
 
-  useEffect(() => {
-    if (user) {
-      router.push("/home");
-    }
-  }, [user]);
+  if (user) {
+    return <Redirect href="/home" />;
+  }
 
   return (
     <Container theme={theme}>

@@ -1,3 +1,4 @@
+import { TOAST_COLORS, ToastType } from "@/src/types/toast";
 import { memo } from "react";
 import { StyleSheet } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -13,13 +14,7 @@ type ToastProps = {
   index: number;
   onRemove: (id: number) => void;
   text: string;
-  type: "SUCCESS" | "ERROR" | "INFO";
-};
-
-const TOAST_TYPES = {
-  SUCCESS: "#098013",
-  ERROR: "#800328",
-  INFO: "#4f4a4b",
+  type: ToastType;
 };
 
 export const Toast = memo(({ id, index, onRemove, text, type }: ToastProps) => {
@@ -43,8 +38,8 @@ export const Toast = memo(({ id, index, onRemove, text, type }: ToastProps) => {
     <PanGestureHandler onGestureEvent={handleGesture}>
       <Animated.View
         style={[
-          { ...styles.toast, backgroundColor: TOAST_TYPES[type] },
-          { bottom: 25 + index * 60 },
+          { ...styles.toast, backgroundColor: TOAST_COLORS[type] },
+          { bottom: 75 + index * 60 },
           animatedStyle,
         ]}
       >

@@ -3,7 +3,7 @@ import { AppState } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 
 export function useLocalAuth() {
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [localAuthError, setLocalAuthError] = useState<string | null>(null);
 
   const authenticate = async () => {
     const result = await LocalAuthentication.authenticateAsync({
@@ -12,9 +12,9 @@ export function useLocalAuth() {
     });
 
     if (!result.success) {
-      setAuthError("Authentication failed. Please try again.");
+      setLocalAuthError("Local authentication failed. Please try again.");
     } else {
-      setAuthError(null);
+      setLocalAuthError(null);
     }
   };
 
@@ -35,5 +35,5 @@ export function useLocalAuth() {
     };
   }, []);
 
-  return { authError, authenticate };
+  return { localAuthError, authenticate };
 }

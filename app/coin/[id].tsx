@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -6,17 +6,17 @@ import { Avatar, IconButton, Text, useTheme } from "react-native-paper";
 import { queryClient } from "../_layout";
 import { CoinMarkets } from "@/src/types/coinMarkets";
 import { CustomThemeType } from "@/src/themes/themes";
-import { useToasts } from "@/src/hooks/useToasts";
-import { Toast } from "@/src/components/Other/Toast";
 import { CoinPriceChart } from "@/src/components/CoinDetails/PriceChart";
 import { mockCoinData } from "@/src/constants/coinDataMock";
-import { useFavoriteCoins } from "@/src/hooks/useFavoriteCoins";
 import { CoinInfoRow } from "@/src/components/CoinDetails/InfoRow";
+import { useFavoriteCoin } from "@/src/hooks/useFavoriteCoin";
+import { useToastStore } from "@/src/store/useToastStore";
+import { ToastType } from "@/src/types/toast";
 
 const CoinCard = () => {
   const { id } = useLocalSearchParams();
   const theme: CustomThemeType = useTheme();
-  const { notifications, addNotification, removeNotification } = useToasts();
+  const { addNotification } = useToastStore();
 
   const coin = useMemo(() => {
     return queryClient
@@ -24,18 +24,25 @@ const CoinCard = () => {
       ?.find((coin) => coin.id === id);
   }, [id]);
 
-  const { favorites, toggleFavorite } = useFavoriteCoins(coin?.id);
+  const { toggleFavorite, isFavorite } = useFavoriteCoin(coin?.id);
 
-  const handleFavoriteToggle = async () => {
-    if (!coin) return;
+  const handleToggleFavorite = useCallback(async () => {
+    if (!coin?.id) return;
 
-    const isFavorite = await toggleFavorite();
+    await toggleFavorite();
+
     if (isFavorite) {
-      addNotification("Added to favorites", "SUCCESS");
+      addNotification(
+        `Coin ${coin.name} removed from favorites`,
+        ToastType.ERROR
+      );
     } else {
-      addNotification("Removed from favorites", "INFO");
+      addNotification(
+        `Coin ${coin.name} added to favorites`,
+        ToastType.SUCCESS
+      );
     }
-  };
+  }, [coin, isFavorite, toggleFavorite, addNotification]);
 
   return (
     <Container theme={theme}>
@@ -46,10 +53,8 @@ const CoinCard = () => {
           <CoinName theme={theme}>{coin?.name}</CoinName>
         </CoinInfo>
         <IconButton
-          icon={
-            favorites.includes(coin?.id as string) ? "heart" : "heart-outline"
-          }
-          onPress={handleFavoriteToggle}
+          icon={isFavorite ? "heart" : "heart-outline"}
+          onPress={handleToggleFavorite}
         />
       </UpperBar>
 
@@ -79,19 +84,6 @@ const CoinCard = () => {
           <CoinInfoRow label="Low 24h" value={`$${coin?.low_24h}`} />
         </About>
       </StyledScrollView>
-
-      <NotificationContainer>
-        {notifications.map((notification, index) => (
-          <Toast
-            key={notification.id}
-            id={notification.id}
-            index={index}
-            onRemove={removeNotification}
-            text={notification.text}
-            type={notification.type}
-          />
-        ))}
-      </NotificationContainer>
     </Container>
   );
 };
@@ -135,12 +127,4 @@ const About = styled.View<{ theme: CustomThemeType }>`
   background-color: ${(props) => props.theme.colors.accent};
   border-radius: 10px;
   width: 100%;
-`;
-
-const NotificationContainer = styled.View`
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  align-items: center;
 `;

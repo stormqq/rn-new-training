@@ -7,21 +7,21 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import * as Clipboard from "expo-clipboard";
-import { useToasts } from "@/src/hooks/useToasts";
-import { Toast } from "@/src/components/Other/Toast";
 import styled from "styled-components/native";
+import { useToastStore } from "@/src/store/useToastStore";
+import { ToastType } from "@/src/types/toast";
 
 export default function SendScreen() {
   const device = useCameraDevice("back");
   const [lastScannedCode, setLastScannedCode] = useState<string | null>(null);
-  const { notifications, addNotification, removeNotification } = useToasts();
+  const { addNotification } = useToastStore();
 
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes) => {
       const scannedValue = codes[0]?.value;
       if (scannedValue !== lastScannedCode) {
-        addNotification(`Scanned value: ${scannedValue}`, "INFO");
+        addNotification(`Scanned value: ${scannedValue}`, ToastType.INFO);
         setLastScannedCode(scannedValue ?? null);
       }
     },
@@ -29,16 +29,16 @@ export default function SendScreen() {
 
   const copyToClipboard = useCallback(async () => {
     if (!lastScannedCode) {
-      addNotification("No data to copy", "ERROR");
+      addNotification("No data to copy", ToastType.ERROR);
       return;
     }
     await Clipboard.setStringAsync(lastScannedCode);
-    addNotification("Copied to clipboard", "SUCCESS");
+    addNotification("Copied to clipboard", ToastType.SUCCESS);
   }, [addNotification, lastScannedCode]);
 
   const shareFetchedData = useCallback(async () => {
     if (!lastScannedCode) {
-      addNotification("No data to share", "ERROR");
+      addNotification("No data to share", ToastType.ERROR);
       return;
     }
     await Share.share({ message: lastScannedCode });
@@ -64,16 +64,6 @@ export default function SendScreen() {
           SHARE
         </Button>
       </Footer>
-      {notifications.map((notification, index) => (
-        <Toast
-          key={notification.id}
-          id={notification.id}
-          index={index}
-          onRemove={removeNotification}
-          text={notification.text}
-          type={notification.type}
-        />
-      ))}
     </Container>
   );
 }
